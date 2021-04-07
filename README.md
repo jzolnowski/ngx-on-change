@@ -1,8 +1,13 @@
 # ngx-on-change
 ## Description
-Fully generic replacement for `Getter / Setter` and `ngOnChanges`. 
+Fully generic decorator to replace `Getter / Setter` and `ngOnChanges`. 
 
 If the value of the class field changes, `@OnChange` decorator calls callback, whose name is supplied as a decortor argument. Decorator doesn't have to be used on `@Input` property binding, but whatever class fields you want to track changes .
+
+##Installation
+First you need to install the npm module:
+
+`npm install ngx-on-change --save`
 
 ## Arguments
 `callbackName: string` - name of method to be called when value change
