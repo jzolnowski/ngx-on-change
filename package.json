@@ -1,7 +1,7 @@
 {
   "name": "ngx-on-change",
   "version": "1.0.0",
-  "description": "",
+  "description": "Fully generic decorator to replace `Getter / Setter` and `ngOnChanges`.",
   "keywords": [],
   "main": "dist/ngx-on-change.umd.js",
   "module": "dist/ngx-on-change.es5.js",
@@ -10,10 +10,6 @@
     "dist"
   ],
   "author": "Jaroslaw Zolnowski <jaroslaw.zolnowski@gmail.com>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jzolnowski/ngx-on-change"
-  },
   "homepage": "https://github.com/jzolnowski/ngx-on-change#readme",
   "license": "MIT",
   "engines": {
@@ -55,5 +51,12 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "^8.0.1",
     "typescript": "^4.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jzolnowski/ngx-on-change.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jzolnowski/ngx-on-change/issues"
   }
 }
