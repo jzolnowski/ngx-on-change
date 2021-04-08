@@ -1,29 +1,46 @@
-export function OnChange<K extends keyof T, T extends object = any>(
-  callbackName: string
-): (target: T, propertyKey: K) => void {
-  return (target: T, propertyKey: K): void => {
-    const originalDescriptor: PropertyDescriptor | undefined = Object.getOwnPropertyDescriptor(target, propertyKey);
-    const values: WeakMap<T, T[K]> = new WeakMap();
+export type SimpleChange<V> = Readonly<{
+  firstChange: boolean;
+  previousValue: V;
+  currentValue: V;
+  isFirstChange: () => boolean;
+}>;
+
+export function OnChange<V>(callbackName: string): (target: any, propertyKey: PropertyKey) => void {
+  return (target: any, propertyKey: PropertyKey): void => {
+
+    if (!callbackName || !target[callbackName] || typeof target[callbackName] !== 'function') {
+      throw new Error(`there's no such a method ${callbackName} in ${target.constructor.name} or ${callbackName} is not a function`);
+    }
+
+    const values: WeakMap<object, V> = new WeakMap();
+    const firstChanges: WeakMap<object, boolean> = new WeakMap();
 
     Object.defineProperty(target, propertyKey, {
-      set(prototypeValue: T[K]): T[K] {
-        Object.defineProperty(this, propertyKey, {
-          get(): T[K] {
-            return originalDescriptor ? originalDescriptor.get.call(this) : values.get(this);
-          },
-          set(instanceValue: T[K]): void {
-            const previousValue: T[K] | undefined = values.get(this);
+      get(): V {
+        return values.get(this);
+      },
+      set(value: V): void {
+        const previousValue: V = values.get(this);
+        let firstChange: boolean = firstChanges.get(this);
 
-            if (previousValue !== instanceValue) {
-              values.set(this, instanceValue);
+        if (!firstChange && previousValue === value) {
+          return;
+        }
 
-              originalDescriptor?.set.call(this, instanceValue);
-              this[callbackName].call(this, instanceValue, previousValue);
-            }
-          }
-        });
+        values.set(this, value);
+        const currentValue: V = values.get(this);
 
-        return (this[propertyKey] = prototypeValue);
+        firstChanges.set(this, firstChange === undefined);
+        firstChange = firstChanges.get(this);
+
+        const simpleChange: SimpleChange<V> = {
+          firstChange,
+          previousValue,
+          currentValue,
+          isFirstChange: () => firstChange,
+        };
+
+        this[callbackName].call(this, value, simpleChange);
       }
     });
   };
