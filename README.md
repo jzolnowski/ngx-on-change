@@ -51,7 +51,7 @@ we can use the decorator on the class property and invoke the callback if the fi
       @OnChange('onConfigChange')
       config: Config;
         
-      onConfigChange(newValue: Config, change: SimpleChange) {
+      onConfigChange(newValue: Config, change: SimpleChange): void {
         consolg.log(newValue, change);
       }
     }
@@ -78,7 +78,7 @@ Similarly, we can replace the `ngOnChanges` method
     
 to make the code more scaled, e.g. by getting rid of multiple if statements:
     
-    export class ConfigComponent extends OnChanges {
+    export class ConfigComponent {
       @Input @OnChange('onConfig1Change) config1: Config;
       @Input @OnChange('onConfig2Change) config2: Config;
       @Input @OnChange('onConfig3Change) config3: Config;
